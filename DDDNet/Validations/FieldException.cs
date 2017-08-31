@@ -21,6 +21,10 @@ namespace DDDNet.Validations
         /// Code d'erreur de validation
         /// </summary>
         public string Code { get; private set; }
+        /// <summary>
+        /// Données additionnelles permettant de préciser le code d'erreur
+        /// </summary>
+        public object CodeData { get; private set; }
 
         /// <summary>
         /// Construit une nouvelle exception pour un champ donné
@@ -28,11 +32,14 @@ namespace DDDNet.Validations
         /// <param name="resource"></param>
         /// <param name="field"></param>
         /// <param name="code"></param>
-        public FieldException(string resource, string field, string code) : base($"Field {resource}.{field} validation failed with error {code}")
+        /// <param name="data"></param>
+        public FieldException(string resource, string field, string code, object data = null)
+            : base($"Field {resource}.{field} validation failed with error {code}")
         {
             Resource = resource;
             Field = field;
             Code = code;
+            CodeData = data;
         }
     }
 }

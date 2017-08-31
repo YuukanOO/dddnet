@@ -60,10 +60,11 @@ namespace DDDNet.Validations
         /// </summary>
         /// <param name="field"></param>
         /// <param name="code"></param>
+        /// <param name="data"></param>
         /// <returns></returns>
-        public Validator AddError(string field, string code)
+        public Validator AddError(string field, string code, object data = null)
         {
-            return AddError(new FieldException(Resource, field, code));
+            return AddError(new FieldException(Resource, field, code, data));
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace DDDNet.Validations
         {
             if (value?.Length < length)
             {
-                validator.AddError(field, nameof(HasMinimumLength));
+                validator.AddError(field, nameof(HasMinimumLength), length);
             }
 
             return validator;
@@ -162,7 +163,7 @@ namespace DDDNet.Validations
         {
             if (value?.Length > length)
             {
-                validator.AddError(field, nameof(HasMaximumLength));
+                validator.AddError(field, nameof(HasMaximumLength), length);
             }
 
             return validator;

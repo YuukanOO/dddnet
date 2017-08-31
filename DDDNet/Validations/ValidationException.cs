@@ -22,7 +22,8 @@ namespace DDDNet.Validations
         /// <param name="resource"></param>
         /// <param name="field"></param>
         /// <param name="code"></param>
-        public ValidationException(string resource, string field, string code) : this(new FieldException(resource, field, code))
+        /// <param name="data"></param>
+        public ValidationException(string resource, string field, string code, object data = null) : this(new FieldException(resource, field, code, data))
         {
 
         }

@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DDDNet.Tests
 {
-    [RaiseEvent(typeof(string))]
     class User
     {
         public string Name { get; set; }
@@ -25,6 +24,7 @@ namespace DDDNet.Tests
 
             Assert.IsTrue(validator.HasError);
             Assert.AreEqual(validator.Errors.Count, 1);
+            Assert.AreEqual(validator.Errors[0].CodeData, 3);
 
             Assert.ThrowsException<ValidationException>(() => validator.Throw());
 
