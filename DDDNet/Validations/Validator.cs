@@ -117,6 +117,23 @@ namespace DDDNet.Validations
         }
 
         /// <summary>
+        /// Vérifie qu'un Guid n'est pas vide
+        /// </summary>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Validator IsRequired(this Validator validator, string field, Guid value)
+        {
+            if (value == Guid.Empty)
+            {
+                validator.AddError(field, nameof(IsRequired));
+            }
+
+            return validator;
+        }
+
+        /// <summary>
         /// Vérifie que la valeur renseignée est bien une adresse email valide selon la RFC 2822
         /// </summary>
         /// <param name="validator"></param>
