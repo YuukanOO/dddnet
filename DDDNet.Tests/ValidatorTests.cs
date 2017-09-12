@@ -9,6 +9,12 @@ namespace DDDNet.Tests
         public string Name { get; set; }
     }
 
+    class Item
+    {
+        public string Code { get; set; }
+        public string Label { get; set; }
+    }
+
     [TestClass]
     public class ValidatorTests
     {
@@ -24,6 +30,9 @@ namespace DDDNet.Tests
 
             Assert.IsTrue(validator.HasError);
             Assert.AreEqual(validator.Errors.Count, 1);
+            Assert.AreEqual(validator.Errors[0].Resource, "User");
+            Assert.AreEqual(validator.Errors[0].Field, "Name");
+            Assert.AreEqual(validator.Errors[0].Code, "HasMaximumLength");
             Assert.AreEqual(validator.Errors[0].CodeData, 3);
 
             Assert.ThrowsException<ValidationException>(() => validator.Throw());
@@ -47,6 +56,26 @@ namespace DDDNet.Tests
                 .IsEmail("Email", "email@something.com");
 
             Assert.IsFalse(validator.HasError);
+
+            var items = new[] {
+                new Item() { Code = "code1", Label = "First code" },
+                new Item(),
+                new Item() { Code = "code3"},
+            };
+
+            validator = Validator.For<User>()
+                .Each(nameof(Item), items, (nestedValidator, o) =>
+                {
+                    nestedValidator
+                        .IsRequired(nameof(o.Code), o.Code)
+                        .IsRequired(nameof(o.Label), o.Label);
+                });
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(validator.Errors[0].Resource, "User");
+            Assert.AreEqual(validator.Errors[0].Field, "Item[1].Code");
+            Assert.AreEqual(validator.Errors[1].Field, "Item[1].Label");
+            Assert.AreEqual(validator.Errors[2].Field, "Item[2].Label");
         }
     }
 }

@@ -16,6 +16,10 @@ namespace DDDNet.Validations
         /// </summary>
         public string Resource { get; private set; }
         /// <summary>
+        /// Préfixe à utiliser quand ajout d'une erreur pour un champ. Surtout utilisé pour la validation de listes imbriquées
+        /// </summary>
+        public string Prefix { get; private set; }
+        /// <summary>
         /// Liste des erreurs de validation pour les champs testés
         /// </summary>
         public List<FieldException> Errors { get; private set; }
@@ -28,8 +32,11 @@ namespace DDDNet.Validations
         /// Construit un nouveau validateur pour la resource fournie
         /// </summary>
         /// <param name="resource"></param>
-        public Validator(string resource)
+        /// <param name="nestedPrefix">Préfixe à appliquer au nom des champs en erreur</param>
+        public Validator(string resource, string nestedPrefix = null)
         {
+            Prefix = string.IsNullOrEmpty(nestedPrefix) ? string.Empty : nestedPrefix + ".";
+
             Resource = resource;
             Errors = new List<FieldException>();
         }
@@ -64,17 +71,17 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public Validator AddError(string field, string code, object data = null)
         {
-            return AddError(new FieldException(Resource, field, code, data));
+            return AddError(new FieldException(Resource, Prefix + field, code, data));
         }
 
         /// <summary>
         /// Ajoute une exception de validation pour un champ au Validator actuel
         /// </summary>
-        /// <param name="exception"></param>
+        /// <param name="exceptions"></param>
         /// <returns></returns>
-        public Validator AddError(FieldException exception)
+        public Validator AddError(params FieldException[] exceptions)
         {
-            Errors.Add(exception);
+            Errors.AddRange(exceptions);
 
             return this;
         }
@@ -198,6 +205,33 @@ namespace DDDNet.Validations
             if (!trueIfUnique())
             {
                 validator.AddError(field, nameof(IsUnique));
+            }
+
+            return validator;
+        }
+
+        /// <summary>
+        /// Applique des validations sur une collection d'objet
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="collection"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public static Validator Each<T>(this Validator validator, string field, IEnumerable<T> collection, Action<Validator, T> handler)
+        {
+            int i = 0;
+
+            foreach(var item in collection)
+            {
+                var nestedValidator = new Validator(validator.Resource, $"{field}[{i}]");
+
+                handler(nestedValidator, item);
+
+                validator.AddError(nestedValidator.Errors.ToArray());
+
+                ++i;
             }
 
             return validator;
