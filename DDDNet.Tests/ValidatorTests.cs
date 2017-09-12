@@ -76,6 +76,16 @@ namespace DDDNet.Tests
             Assert.AreEqual(validator.Errors[0].Field, "Item[1].Code");
             Assert.AreEqual(validator.Errors[1].Field, "Item[1].Label");
             Assert.AreEqual(validator.Errors[2].Field, "Item[2].Label");
+
+            validator = Validator.For<User>()
+                .IsRequired<Item>(nameof(Item), null);
+
+            Assert.IsTrue(validator.HasError);
+
+            validator = Validator.For<User>()
+                .IsRequired<Item>(nameof(Item), new Item());
+
+            Assert.IsFalse(validator.HasError);
         }
     }
 }

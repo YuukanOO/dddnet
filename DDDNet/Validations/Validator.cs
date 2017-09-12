@@ -141,6 +141,24 @@ namespace DDDNet.Validations
         }
 
         /// <summary>
+        /// Vérifie qu'un objet n'est pas nul
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Validator IsRequired<T>(this Validator validator, string field, T value) where T : class
+        {
+            if (value == null)
+            {
+                validator.AddError(field, nameof(IsRequired));
+            }
+
+            return validator;
+        }
+
+        /// <summary>
         /// Vérifie que la valeur renseignée est bien une adresse email valide selon la RFC 2822
         /// </summary>
         /// <param name="validator"></param>
