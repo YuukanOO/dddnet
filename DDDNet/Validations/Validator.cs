@@ -159,6 +159,26 @@ namespace DDDNet.Validations
         }
 
         /// <summary>
+        /// Vérifie que 2 objets sont identiques
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <param name="otherField"></param>
+        /// <param name="otherValue"></param>
+        /// <returns></returns>
+        public static Validator AreEqual<T>(this Validator validator, string field, T value, string otherField, T otherValue)
+        {
+            if (!value.Equals(otherValue))
+            {
+                validator.AddError(field, nameof(AreEqual), otherField);
+            }
+
+            return validator;
+        }
+
+        /// <summary>
         /// Vérifie que la valeur renseignée est bien une adresse email valide selon la RFC 2822
         /// </summary>
         /// <param name="validator"></param>
@@ -247,9 +267,35 @@ namespace DDDNet.Validations
 
                 handler(nestedValidator, item);
 
-                validator.AddError(nestedValidator.Errors.ToArray());
+                if (nestedValidator.HasError)
+                {
+                    validator.AddError(nestedValidator.Errors.ToArray());
+                }
 
                 ++i;
+            }
+
+            return validator;
+        }
+
+        /// <summary>
+        /// Valide un champ imbriqué
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public static Validator For<T>(this Validator validator, string field, T value, Action<Validator, T> handler)
+        {
+            var nestedValidator = new Validator(validator.Resource, field);
+
+            handler(nestedValidator, value);
+
+            if (nestedValidator.HasError)
+            {
+                validator.AddError(nestedValidator.Errors.ToArray());
             }
 
             return validator;

@@ -7,6 +7,10 @@ namespace DDDNet.Tests
     class User
     {
         public string Name { get; set; }
+        public string Password { get; set; }
+        public string PasswordConfirm { get; set; }
+
+        public Item Item { get; set; }
     }
 
     class Item
@@ -86,6 +90,33 @@ namespace DDDNet.Tests
                 .IsRequired<Item>(nameof(Item), new Item());
 
             Assert.IsFalse(validator.HasError);
+
+            validator = Validator.For<User>()
+                .AreEqual(nameof(User.Password), "password", nameof(User.PasswordConfirm), "password");
+
+            Assert.IsFalse(validator.HasError);
+
+            validator = Validator.For<User>()
+                .AreEqual(nameof(User.Password), "password", nameof(User.PasswordConfirm), "doesnotmatch");
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(validator.Errors[0].Field, "Password");
+            Assert.AreEqual(validator.Errors[0].Code, "AreEqual");
+            Assert.AreEqual(validator.Errors[0].CodeData, "PasswordConfirm");
+
+            var user = new User();
+
+            validator = Validator.For<User>()
+                .For(nameof(User.Item), user.Item, (v, o) =>
+                {
+                    v
+                        .IsRequired(nameof(Item.Code), o?.Code)
+                        .IsRequired(nameof(Item.Label), o?.Label);
+                });
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(validator.Errors[0].Field, "Item.Code");
+            Assert.AreEqual(validator.Errors[1].Field, "Item.Label");
         }
     }
 }
