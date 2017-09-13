@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DDDNet.Infrastructure\DDDNet.Infrastructure.csproj" />
     <ProjectReference Include="..\DDDNet\DDDNet.csproj" />
   </ItemGroup>
 

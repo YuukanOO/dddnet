@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDDNet", "DDDNet\DDDNet.csproj", "{5EDE6BEA-6B22-402D-8A97-E8F66E8F2C87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDNet.Tests", "DDDNet.Tests\DDDNet.Tests.csproj", "{40F59167-EC93-451A-8B8D-6348529391D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDDNet.Tests", "DDDNet.Tests\DDDNet.Tests.csproj", "{40F59167-EC93-451A-8B8D-6348529391D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDDNet.Infrastructure", "DDDNet.Infrastructure\DDDNet.Infrastructure.csproj", "{F7DD6A74-48A3-4B1E-A9DA-6AE832A2E104}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{40F59167-EC93-451A-8B8D-6348529391D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40F59167-EC93-451A-8B8D-6348529391D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40F59167-EC93-451A-8B8D-6348529391D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7DD6A74-48A3-4B1E-A9DA-6AE832A2E104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7DD6A74-48A3-4B1E-A9DA-6AE832A2E104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7DD6A74-48A3-4B1E-A9DA-6AE832A2E104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7DD6A74-48A3-4B1E-A9DA-6AE832A2E104}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

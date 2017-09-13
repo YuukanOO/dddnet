@@ -11,14 +11,12 @@ namespace DDDNet.Validations
     /// </summary>
     public class Validator
     {
+        private string _prefix = string.Empty;
+
         /// <summary>
         /// Nom de la resource concernée
         /// </summary>
         public string Resource { get; private set; }
-        /// <summary>
-        /// Préfixe à utiliser quand ajout d'une erreur pour un champ. Surtout utilisé pour la validation de listes imbriquées
-        /// </summary>
-        public string Prefix { get; private set; }
         /// <summary>
         /// Liste des erreurs de validation pour les champs testés
         /// </summary>
@@ -32,11 +30,9 @@ namespace DDDNet.Validations
         /// Construit un nouveau validateur pour la resource fournie
         /// </summary>
         /// <param name="resource"></param>
-        /// <param name="nestedPrefix">Préfixe à appliquer au nom des champs en erreur</param>
-        public Validator(string resource, string nestedPrefix = null)
+        public Validator(string resource)
         {
-            Prefix = string.IsNullOrEmpty(nestedPrefix) ? string.Empty : nestedPrefix + ".";
-
+            _prefix = string.Empty;
             Resource = resource;
             Errors = new List<FieldException>();
         }
@@ -71,7 +67,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public Validator AddError(string field, string code, object data = null)
         {
-            return AddError(new FieldException(Resource, Prefix + field, code, data));
+            return AddError(new FieldException(Resource, _prefix + field, code, data));
         }
 
         /// <summary>
@@ -84,6 +80,23 @@ namespace DDDNet.Validations
             Errors.AddRange(exceptions);
 
             return this;
+        }
+
+        /// <summary>
+        /// Exécute un délégué en appliquant un préfixe aux erreurs qui seront retournées.
+        /// Principalement utilisé pour les validations imbriquées.
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="delg"></param>
+        public void Prefix(string prefix, Action delg)
+        {
+            var oldPrefix = _prefix;
+
+            _prefix = prefix + ".";
+
+            delg();
+
+            _prefix = oldPrefix;
         }
 
         /// <summary>
@@ -263,14 +276,10 @@ namespace DDDNet.Validations
 
             foreach(var item in collection)
             {
-                var nestedValidator = new Validator(validator.Resource, $"{field}[{i}]");
-
-                handler(nestedValidator, item);
-
-                if (nestedValidator.HasError)
+                validator.Prefix($"{field}[{i}]", () =>
                 {
-                    validator.AddError(nestedValidator.Errors.ToArray());
-                }
+                    handler(validator, item);
+                });
 
                 ++i;
             }
@@ -289,15 +298,11 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator For<T>(this Validator validator, string field, T value, Action<Validator, T> handler)
         {
-            var nestedValidator = new Validator(validator.Resource, field);
-
-            handler(nestedValidator, value);
-
-            if (nestedValidator.HasError)
+            validator.Prefix(field, () =>
             {
-                validator.AddError(nestedValidator.Errors.ToArray());
-            }
-
+                handler(validator, value);
+            });
+            
             return validator;
         }
     }
