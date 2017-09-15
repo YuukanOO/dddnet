@@ -9,7 +9,8 @@ namespace DDDNet.Attributes
     /// ainsi une passerelle pour attaquer le domaine. Il est commun de fournir aux opérations du service applicatif des
     /// commandes et sa responsabilité et de traduire ces commandes en actions du domaine.
     /// 
-    /// C'est aussi à lui de sauvegarder les entités en passant par les dépôts.
+    /// C'est aussi à lui de sauvegarder les entités en passant par les dépôts. Dans la majorité des cas, un service applicatif sera
+    /// soit un CommandApplicationService, soit un QueryApplicationService.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class ApplicationServiceAttribute : Attribute
