@@ -28,17 +28,17 @@ namespace DDDNet.Tests
         {
             var src = new User();
 
-            Assert.AreEqual(1, src.PopEvents().Length);
-            Assert.AreEqual(0, src.PopEvents().Length);
+            Assert.AreEqual(1, ((IEventSource)src).PopEvents().Length);
+            Assert.AreEqual(0, ((IEventSource)src).PopEvents().Length);
 
             src = new User();
 
-            Assert.IsInstanceOfType(src.PopEvents()[0], typeof(UserCreated));
+            Assert.IsInstanceOfType(((IEventSource)src).PopEvents()[0], typeof(UserCreated));
 
             src = new User();
             src.ChangePassword();
-
-            var evts = src.PopEvents();
+            
+            var evts = ((IEventSource)src).PopEvents();
 
             Assert.AreEqual(2, evts.Length);
             Assert.IsInstanceOfType(evts[0], typeof(UserCreated));
@@ -65,11 +65,11 @@ namespace DDDNet.Tests
             var src = new User();
             src.ChangePassword();
 
-            dispatcher.Dispatch(src.PopEvents());
+            dispatcher.Dispatch(((IEventSource)src).PopEvents());
 
             Assert.AreEqual(2, numberOfHandlersCalled);
 
-            dispatcher.Dispatch(src.PopEvents());
+            dispatcher.Dispatch(((IEventSource)src).PopEvents());
 
             Assert.AreEqual(2, numberOfHandlersCalled);
 
@@ -80,7 +80,7 @@ namespace DDDNet.Tests
 
             src.ChangePassword();
 
-            dispatcher.Dispatch(src.PopEvents());
+            dispatcher.Dispatch(((IEventSource)src).PopEvents());
 
             Assert.AreEqual(4, numberOfHandlersCalled);
         }

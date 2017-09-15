@@ -4,7 +4,10 @@ using System.Collections.Generic;
 namespace DDDNet.Infrastructure.Events
 {
     /// <summary>
-    /// Implémentation basique d'une source d'événements
+    /// Implémentation basique d'une source d'événements.
+    /// 
+    /// L'interface est ici implémentée explicitement de manière à ne pas poluer le domaine. Une méthode protégée permet
+    /// néanmoins de lever des événements au sein de l'entité elle même.
     /// </summary>
     public abstract class EventSource : IEventSource
     {
@@ -15,7 +18,7 @@ namespace DDDNet.Infrastructure.Events
             _pendingEvents = new List<IEvent>();
         }
 
-        public IEvent[] PopEvents()
+        IEvent[] IEventSource.PopEvents()
         {
             var events = _pendingEvents.ToArray();
 
@@ -24,9 +27,18 @@ namespace DDDNet.Infrastructure.Events
             return events;
         }
 
-        public void RaiseEvent(IEvent evt)
+        void IEventSource.RaiseEvent(IEvent evt)
         {
             _pendingEvents.Add(evt);
+        }
+
+        /// <summary>
+        /// Lève un événement du domaine
+        /// </summary>
+        /// <param name="evt"></param>
+        protected void RaiseEvent(IEvent evt)
+        {
+            ((IEventSource)this).RaiseEvent(evt);
         }
     }
 }
