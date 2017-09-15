@@ -1,6 +1,6 @@
 ﻿using DDDNet.Validations;
 
-namespace DDDNet.Applications
+namespace DDDNet.Commands
 {
     /// <summary>
     /// Interface représente une commande applicative. Cette commande sera traitée par un service applicatif.
