@@ -200,7 +200,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator IsEmail(this Validator validator, string field, string value)
         {
-            if (!_emailRegex.IsMatch(value))
+            if (!_emailRegex.IsMatch(value ?? string.Empty))
             {
                 validator.AddError(field, nameof(IsEmail));
             }
