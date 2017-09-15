@@ -1,6 +1,7 @@
 using DDDNet.Attributes;
 using DDDNet.Validations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace DDDNet.Tests
 {
@@ -117,6 +118,48 @@ namespace DDDNet.Tests
             Assert.IsTrue(validator.HasError);
             Assert.AreEqual(validator.Errors[0].Field, "Item.Code");
             Assert.AreEqual(validator.Errors[1].Field, "Item.Label");
+
+            validator = Validator.For<DateTime>()
+                .IsLessThan(nameof(DateTime), DateTime.UtcNow, DateTime.UtcNow.AddSeconds(30))
+                .IsLessThan("Int", 5, 6);
+
+            Assert.IsFalse(validator.HasError);
+
+            validator = Validator.For<DateTime>()
+                .IsLessThan(nameof(DateTime), DateTime.UtcNow, DateTime.UtcNow.AddSeconds(-30))
+                .IsLessThan("Int", 5, 5);
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(validator.Errors.Count, 2);
+
+            validator = Validator.For<DateTime>()
+                .IsGreaterThan(nameof(DateTime), DateTime.UtcNow, DateTime.UtcNow.AddSeconds(-30))
+                .IsGreaterThan("Int", 6, 5);
+
+            Assert.IsFalse(validator.HasError);
+
+            validator = Validator.For<DateTime>()
+                .IsGreaterThan(nameof(DateTime), DateTime.UtcNow, DateTime.UtcNow.AddSeconds(30))
+                .IsGreaterThan("Int", 5, 5)
+                .IsGreaterThan("Int", 4, 5);
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(validator.Errors.Count, 3);
+
+            var now = DateTime.UtcNow;
+
+            validator = Validator.For<DateTime>()
+                .IsLessThanOrEqual(nameof(DateTime), now, now)
+                .IsLessThanOrEqual("Int", 5, 5)
+                .IsLessThanOrEqual("Int", 3, 5);
+
+            Assert.IsFalse(validator.HasError);
+
+            validator = Validator.For<DateTime>()
+                .IsLessThanOrEqual(nameof(DateTime), now, now)
+                .IsLessThanOrEqual("Int", 5, 2);
+
+            Assert.IsTrue(validator.HasError);
         }
     }
 }

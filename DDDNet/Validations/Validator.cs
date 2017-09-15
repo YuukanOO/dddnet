@@ -245,6 +245,82 @@ namespace DDDNet.Validations
         }
 
         /// <summary>
+        /// Vérifie que value est strictement inférieure à otherValue
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <param name="otherValue"></param>
+        /// <returns></returns>
+        public static Validator IsLessThan<T>(this Validator validator, string field, T value, T otherValue) where T : IComparable<T>
+        {
+            if(value.CompareTo(otherValue) >= 0)
+            {
+                validator.AddError(field, nameof(IsLessThan), otherValue);
+            }
+
+            return validator;
+        }
+
+        /// <summary>
+        /// Vérifie que value est inférieure ou égale à otherValue
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <param name="otherValue"></param>
+        /// <returns></returns>
+        public static Validator IsLessThanOrEqual<T>(this Validator validator, string field, T value, T otherValue) where T : IComparable<T>
+        {
+            if (value.CompareTo(otherValue) > 0)
+            {
+                validator.AddError(field, nameof(IsLessThanOrEqual), otherValue);
+            }
+
+            return validator;
+        }
+
+        /// <summary>
+        /// Vérifie que value est strictement supérieure à otherValue
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <param name="otherValue"></param>
+        /// <returns></returns>
+        public static Validator IsGreaterThan<T>(this Validator validator, string field, T value, T otherValue) where T : IComparable<T>
+        {
+            if (value.CompareTo(otherValue) <= 0)
+            {
+                validator.AddError(field, nameof(IsGreaterThan), otherValue);
+            }
+
+            return validator;
+        }
+
+        /// <summary>
+        /// Vérifie que value est supérieure ou égale à otherValue
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="validator"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <param name="otherValue"></param>
+        /// <returns></returns>
+        public static Validator IsGreaterThanOrEqual<T>(this Validator validator, string field, T value, T otherValue) where T : IComparable<T>
+        {
+            if (value.CompareTo(otherValue) < 0)
+            {
+                validator.AddError(field, nameof(IsGreaterThanOrEqual), otherValue);
+            }
+
+            return validator;
+        }
+
+        /// <summary>
         /// Vérifie l'unicité d'un champ selon le prédicat fournit
         /// </summary>
         /// <param name="validator"></param>
