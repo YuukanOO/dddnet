@@ -38,6 +38,16 @@ namespace DDDNet.Validations
         }
 
         /// <summary>
+        /// Petit raccourci pour instancier un Validator
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <returns></returns>
+        public static Validator For(string resource)
+        {
+            return new Validator(resource);
+        }
+
+        /// <summary>
         /// Instantie un Validator pour la resource fournie. Simple petit raccourci.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -55,7 +65,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator For<T>()
         {
-            return new Validator(typeof(T).Name);
+            return For(typeof(T).Name);
         }
 
         /// <summary>
