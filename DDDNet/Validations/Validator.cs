@@ -182,7 +182,7 @@ namespace DDDNet.Validations
         }
 
         /// <summary>
-        /// Vérifie que 2 objets sont identiques
+        /// Vérifie que 2 objets sont identiques. Si value est null, alors le test n'est pas exécuté
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="validator"></param>
@@ -193,7 +193,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator AreEqual<T>(this Validator validator, string field, T value, string otherField, T otherValue)
         {
-            if (!value.Equals(otherValue))
+            if (value != null && !value.Equals(otherValue))
             {
                 validator.AddError(field, nameof(AreEqual), otherField);
             }
@@ -265,7 +265,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator IsLessThan<T>(this Validator validator, string field, T value, T otherValue) where T : IComparable<T>
         {
-            if(value.CompareTo(otherValue) >= 0)
+            if (value != null && value.CompareTo(otherValue) >= 0)
             {
                 validator.AddError(field, nameof(IsLessThan), otherValue);
             }
@@ -284,7 +284,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator IsLessThanOrEqual<T>(this Validator validator, string field, T value, T otherValue) where T : IComparable<T>
         {
-            if (value.CompareTo(otherValue) > 0)
+            if (value != null && value.CompareTo(otherValue) > 0)
             {
                 validator.AddError(field, nameof(IsLessThanOrEqual), otherValue);
             }
@@ -303,7 +303,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator IsGreaterThan<T>(this Validator validator, string field, T value, T otherValue) where T : IComparable<T>
         {
-            if (value.CompareTo(otherValue) <= 0)
+            if (value != null && value.CompareTo(otherValue) <= 0)
             {
                 validator.AddError(field, nameof(IsGreaterThan), otherValue);
             }
@@ -322,7 +322,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator IsGreaterThanOrEqual<T>(this Validator validator, string field, T value, T otherValue) where T : IComparable<T>
         {
-            if (value.CompareTo(otherValue) < 0)
+            if (value != null && value.CompareTo(otherValue) < 0)
             {
                 validator.AddError(field, nameof(IsGreaterThanOrEqual), otherValue);
             }

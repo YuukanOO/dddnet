@@ -101,6 +101,7 @@ namespace DDDNet.Tests
                 .AreEqual(nameof(User.Password), "password", nameof(User.PasswordConfirm), "doesnotmatch");
 
             Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(1, validator.Errors.Count);
             Assert.AreEqual(validator.Errors[0].Field, "Password");
             Assert.AreEqual(validator.Errors[0].Code, "AreEqual");
             Assert.AreEqual(validator.Errors[0].CodeData, "PasswordConfirm");
