@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace DDDNet.Validations
 {
@@ -40,6 +41,20 @@ namespace DDDNet.Validations
             Field = field;
             Code = code;
             CodeData = data;
+        }
+
+        /// <summary>
+        /// Surcharge de manière à modifier les informations remontées lors de la sérialisation de l'objet
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Resource), Resource);
+            info.AddValue(nameof(Field), Field);
+            info.AddValue(nameof(Code), Code);
+            info.AddValue(nameof(CodeData), CodeData);
+            info.AddValue(nameof(Message), Message);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace DDDNet.Exceptions
 {
@@ -27,6 +28,18 @@ namespace DDDNet.Exceptions
         {
             Code = code;
             Errors = innerErrors;
+        }
+
+        /// <summary>
+        /// Surcharge de manière à modifier les informations remontées lors de la sérialisation de l'objet
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Code), Code);
+            info.AddValue(nameof(Message), Message);
+            info.AddValue(nameof(Errors), Errors);
         }
     }
 }

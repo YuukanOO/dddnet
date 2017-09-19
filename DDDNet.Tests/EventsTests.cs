@@ -1,5 +1,4 @@
 ﻿using DDDNet.Events;
-using DDDNet.Infrastructure.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DDDNet.Tests

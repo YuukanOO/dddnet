@@ -1,8 +1,7 @@
 ﻿using System;
-using DDDNet.Events;
 using System.Collections.Generic;
 
-namespace DDDNet.Infrastructure.Events
+namespace DDDNet.Events
 {
     /// <summary>
     /// Implémentation d'un dispatcher qui dispatche les événements le plus simplement du monde

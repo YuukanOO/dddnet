@@ -1,7 +1,6 @@
-﻿using DDDNet.Events;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DDDNet.Infrastructure.Events
+namespace DDDNet.Events
 {
     /// <summary>
     /// Implémentation basique d'une source d'événements.
