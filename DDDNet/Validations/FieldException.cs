@@ -53,7 +53,12 @@ namespace DDDNet.Validations
             info.AddValue(nameof(Resource), Resource);
             info.AddValue(nameof(Field), Field);
             info.AddValue(nameof(Code), Code);
-            info.AddValue(nameof(CodeData), CodeData);
+
+            if (CodeData != null)
+            {
+                info.AddValue(nameof(CodeData), CodeData);
+            }
+
             info.AddValue(nameof(Message), Message);
         }
     }
