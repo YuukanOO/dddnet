@@ -138,7 +138,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator IsRequired(this Validator validator, string field, string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value?.Trim()))
             {
                 validator.AddError(field, nameof(IsRequired));
             }
@@ -171,7 +171,7 @@ namespace DDDNet.Validations
         /// <param name="field"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Validator IsRequired<T>(this Validator validator, string field, T value) where T : class
+        public static Validator IsRequired<T>(this Validator validator, string field, T value)
         {
             if (value == null)
             {
@@ -210,7 +210,7 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator IsEmail(this Validator validator, string field, string value)
         {
-            if (!_emailRegex.IsMatch(value ?? string.Empty))
+            if (!string.IsNullOrEmpty(value?.Trim()) && !_emailRegex.IsMatch(value))
             {
                 validator.AddError(field, nameof(IsEmail));
             }
@@ -228,7 +228,9 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator HasMinimumLength(this Validator validator, string field, string value, int length)
         {
-            if (value?.Length < length)
+            var trimmedValue = value?.Trim();
+
+            if (!string.IsNullOrEmpty(trimmedValue) && trimmedValue.Length < length)
             {
                 validator.AddError(field, nameof(HasMinimumLength), length);
             }
@@ -246,7 +248,9 @@ namespace DDDNet.Validations
         /// <returns></returns>
         public static Validator HasMaximumLength(this Validator validator, string field, string value, int length)
         {
-            if (value?.Length > length)
+            var trimmedValue = value?.Trim();
+
+            if (!string.IsNullOrEmpty(trimmedValue) && trimmedValue.Length > length)
             {
                 validator.AddError(field, nameof(HasMaximumLength), length);
             }
