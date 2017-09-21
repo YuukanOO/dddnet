@@ -188,10 +188,10 @@ namespace DDDNet.Validations
         /// <param name="validator"></param>
         /// <param name="field"></param>
         /// <param name="value"></param>
-        /// <param name="otherField"></param>
         /// <param name="otherValue"></param>
+        /// <param name="otherField">Nom optionnel pour l'autre champ, sera passé en tant que CodeData si erreurs</param>
         /// <returns></returns>
-        public static Validator AreEqual<T>(this Validator validator, string field, T value, string otherField, T otherValue)
+        public static Validator AreEqual<T>(this Validator validator, string field, T value, T otherValue, string otherField = null)
         {
             if (value != null && !value.Equals(otherValue))
             {
