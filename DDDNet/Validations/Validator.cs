@@ -11,7 +11,7 @@ namespace DDDNet.Validations
     /// </summary>
     public class Validator
     {
-        private string _prefix = string.Empty;
+        private string _prefix;
 
         /// <summary>
         /// Nom de la resource concernée
