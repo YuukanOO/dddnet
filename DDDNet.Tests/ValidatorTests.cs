@@ -6,17 +6,8 @@ namespace DDDNet.Tests
 {
     class User
     {
-        public string Name { get; set; }
-        public string Password { get; set; }
-        public string PasswordConfirm { get; set; }
-
-        public Item Item { get; set; }
-    }
-
-    class Item
-    {
-        public string Code { get; set; }
-        public string Label { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 
     [TestClass]
@@ -148,13 +139,46 @@ namespace DDDNet.Tests
         [TestMethod]
         public void TestForObject()
         {
-            
+            var userDelegate = new Action<Validator, User>((nestedValidator, o) => {
+                nestedValidator
+                    .IsRequired("FirstName", o.FirstName)
+                    .IsRequired("LastName", o.LastName);
+            });
+
+            var validator = Validator.For(nameof(TestForObject))
+                .For("UserNotValid", new User(), userDelegate)
+                .For("UserValid", new User() { FirstName = "John", LastName = "Doe" }, userDelegate);
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(2, validator.Errors.Count);
+            Assert.AreEqual("UserNotValid.FirstName", validator.Errors[0].Field);
+            Assert.AreEqual("UserNotValid.LastName", validator.Errors[1].Field);
         }
 
         [TestMethod]
         public void TestEach()
         {
+            var userDelegate = new Action<Validator, User>((nestedValidator, o) => {
+                nestedValidator
+                    .IsRequired("FirstName", o.FirstName)
+                    .IsRequired("LastName", o.LastName);
+            });
 
+            var validator = Validator.For(nameof(TestEach))
+                .Each("UsersNotValid", new []{
+                    new User(),
+                    new User() { FirstName = "John" },
+                }, userDelegate)
+                .Each("UsersValid", new[] {
+                    new User() { FirstName = "John", LastName = "Doe" },
+                    new User() { FirstName = "Bruce", LastName = "Lee" },
+                }, userDelegate);
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(3, validator.Errors.Count);
+            Assert.AreEqual("UsersNotValid[0].FirstName", validator.Errors[0].Field);
+            Assert.AreEqual("UsersNotValid[0].LastName", validator.Errors[1].Field);
+            Assert.AreEqual("UsersNotValid[1].LastName", validator.Errors[2].Field);
         }
         
         [TestMethod]
