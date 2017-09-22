@@ -184,25 +184,81 @@ namespace DDDNet.Tests
         [TestMethod]
         public void TestIsLessThan()
         {
+            var now = DateTime.UtcNow;
 
+            var validator = Validator.For(nameof(TestIsLessThan))
+                .IsLessThan("GreaterIntegers", 3, 1)
+                .IsLessThan("EqualIntegers", 3, 3)
+                .IsLessThan("GreaterDates", now, now.AddDays(-5))
+                .IsLessThan("EqualDates", now, now)
+                .IsLessThan("ValidIntegers", 5, 6)
+                .IsLessThan("ValidDates", now, now.AddDays(5));
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(4, validator.Errors.Count);
+            Assert.AreEqual("GreaterIntegers", validator.Errors[0].Field);
+            Assert.AreEqual("EqualIntegers", validator.Errors[1].Field);
+            Assert.AreEqual("GreaterDates", validator.Errors[2].Field);
+            Assert.AreEqual("EqualDates", validator.Errors[3].Field);
         }
 
         [TestMethod]
         public void TestIsLessThanOrEqual()
         {
+            var now = DateTime.UtcNow;
 
+            var validator = Validator.For(nameof(TestIsLessThan))
+                .IsLessThanOrEqual("GreaterIntegers", 3, 1)
+                .IsLessThanOrEqual("EqualIntegers", 3, 3)
+                .IsLessThanOrEqual("GreaterDates", now, now.AddDays(-5))
+                .IsLessThanOrEqual("EqualDates", now, now)
+                .IsLessThanOrEqual("ValidIntegers", 5, 6)
+                .IsLessThanOrEqual("ValidDates", now, now.AddDays(5));
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(2, validator.Errors.Count);
+            Assert.AreEqual("GreaterIntegers", validator.Errors[0].Field);
+            Assert.AreEqual("GreaterDates", validator.Errors[1].Field);
         }
 
         [TestMethod]
         public void TestIsGreaterThan()
         {
+            var now = DateTime.UtcNow;
 
+            var validator = Validator.For(nameof(TestIsLessThan))
+                .IsGreaterThan("LessIntegers", 3, 5)
+                .IsGreaterThan("EqualIntegers", 3, 3)
+                .IsGreaterThan("LessDates", now, now.AddDays(5))
+                .IsGreaterThan("EqualDates", now, now)
+                .IsGreaterThan("ValidIntegers", 5, 2)
+                .IsGreaterThan("ValidDates", now, now.AddDays(-5));
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(4, validator.Errors.Count);
+            Assert.AreEqual("LessIntegers", validator.Errors[0].Field);
+            Assert.AreEqual("EqualIntegers", validator.Errors[1].Field);
+            Assert.AreEqual("LessDates", validator.Errors[2].Field);
+            Assert.AreEqual("EqualDates", validator.Errors[3].Field);
         }
 
         [TestMethod]
         public void TestIsGreaterThanOrEqual()
         {
+            var now = DateTime.UtcNow;
 
+            var validator = Validator.For(nameof(TestIsLessThan))
+                .IsGreaterThanOrEqual("LessIntegers", 3, 5)
+                .IsGreaterThanOrEqual("EqualIntegers", 3, 3)
+                .IsGreaterThanOrEqual("LessDates", now, now.AddDays(5))
+                .IsGreaterThanOrEqual("EqualDates", now, now)
+                .IsGreaterThanOrEqual("ValidIntegers", 5, 2)
+                .IsGreaterThanOrEqual("ValidDates", now, now.AddDays(-5));
+
+            Assert.IsTrue(validator.HasError);
+            Assert.AreEqual(2, validator.Errors.Count);
+            Assert.AreEqual("LessIntegers", validator.Errors[0].Field);
+            Assert.AreEqual("LessDates", validator.Errors[1].Field);
         }
     }
 }
