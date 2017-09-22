@@ -4,15 +4,15 @@ using System;
 
 namespace DDDNet.Tests
 {
-    class User
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-    }
-
     [TestClass]
     public class ValidatorTests
     {
+        class User
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+        }
+
         [TestMethod]
         public void TestStringIsRequired()
         {
